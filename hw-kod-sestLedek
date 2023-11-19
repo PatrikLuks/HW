@@ -1,0 +1,69 @@
+// Definice proměnné pro ukládání příchozího čísla
+int receivedNumber;
+
+void setup() {
+  // Inicializace sériové komunikace
+  Serial.begin(9600);
+
+  // Inicializace digitálních výstupů pro pozice D1 až D6
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+}
+
+void loop() {
+  // Kontrola, zda jsou k dispozici data ke čtení
+  if (Serial.available() > 0) {
+    // Přečtení přijatého čísla
+    receivedNumber = Serial.parseInt();
+
+    // Zpracování přijatého čísla a aktivace odpovídající pozice
+    switch (receivedNumber) {
+      case 1:
+        activatePosition(1);
+        break;
+
+      case 2:
+        activatePosition(2);
+        break;
+
+      case 3:
+        activatePosition(3);
+        break;
+
+      case 4:
+        activatePosition(4);
+        break;
+
+      case 5:
+        activatePosition(5);
+        break;
+
+      case 6:
+        activatePosition(6);
+        break;
+
+      default:
+        Serial.println("Zadali jste neplatné číslo. Zadejte číslo od 1 do 6.");
+        break;
+    }
+  }
+}
+
+// Funkce pro aktivaci pozice D1 až D6
+void activatePosition(int position) {
+  // Vypnutí všech pozic
+  for (int i = 2; i <= 7; i++) {
+    digitalWrite(i, LOW);
+  }
+
+  // Aktivace vybrané pozice
+  digitalWrite(position + 1, HIGH);
+
+  // Informační výpis do sériového monitoru
+  Serial.print("Aktivována pozice D");
+  Serial.println(position);
+}
